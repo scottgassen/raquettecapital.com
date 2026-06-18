@@ -11,7 +11,6 @@
       height: 100%;
       background: #000;
       color: #fff;
-      /* Bahnschrift Semi Condensed is a Windows system font; we cascade to similar web-safe condensed fonts */
       font-family: 'Bahnschrift', 'Arial Narrow', 'Franklin Gothic Medium Cond', sans-serif;
       font-stretch: condensed;
       overflow: hidden;
@@ -30,37 +29,29 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: flex-start;
-      padding: 0 8% 0 11%;
+      align-items: center;
+      padding: 0 8%;
       position: relative;
     }
 
-    /* small icon top-left */
-    .site-icon {
-      position: absolute;
-      top: 20px;
-      left: 24px;
-      width: 40px;
-      height: 40px;
-      opacity: 0.9;
-    }
-
-    /* logo */
+    /* logo — centered, matched width to tagline block */
     .logo {
-      width: clamp(260px, 32vw, 420px);
+      width: 100%;
+      max-width: 420px;
       height: auto;
       margin-bottom: 44px;
+      display: block;
     }
 
     /* rules + tagline block */
     .tagline-block {
       width: 100%;
-      max-width: 460px;
+      max-width: 420px;
     }
 
     .rule {
       border: none;
-      border-top: 1px solid rgba(167, 169, 171, 0.5); /* #a7a9ab at 50% */
+      border-top: 1px solid rgba(167, 169, 171, 0.5);
       width: 100%;
       margin-bottom: 26px;
     }
@@ -82,17 +73,19 @@
       letter-spacing: 0.02em;
     }
 
-    /* ── Right: photo ── */
+    /* ── Right: photo — always crops, never squeezes ── */
     .panel-right {
       position: relative;
       overflow: hidden;
     }
 
     .panel-right img {
+      position: absolute;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 40%;
+      object-position: center center;
       display: block;
       filter: grayscale(100%);
     }
@@ -111,56 +104,152 @@
       text-decoration: none;
       z-index: 100;
     }
-    .investor-portal:hover {
-      color: #a7a9ab;
-    }
+    .investor-portal:hover { color: #a7a9ab; }
 
     /* ── Mobile ── */
     @media (max-width: 768px) {
       html, body { overflow: auto; }
       .layout {
         grid-template-columns: 1fr;
-        grid-template-rows: auto 55vw;
+        grid-template-rows: auto 70vw;
         height: auto;
         min-height: 100vh;
       }
       .panel-left {
-        padding: 72px 8% 44px;
-        align-items: center;
+        padding: 60px 8% 44px;
       }
-      .logo { width: 75vw; max-width: 320px; }
+      .panel-right {
+        height: 70vw;
+      }
+      .logo { max-width: 320px; }
       .tagline { font-size: 13px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
     }
+
+    /* ── Login modal overlay ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: #111;
+      border: 1px solid rgba(167,169,171,0.3);
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .modal img {
+      width: 200px;
+      height: auto;
+      margin-bottom: 8px;
+    }
+
+    .modal h2 {
+      font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #a7a9ab;
+    }
+
+    .modal input {
+      width: 100%;
+      background: #000;
+      border: 1px solid rgba(167,169,171,0.4);
+      color: #fff;
+      font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+      font-size: 13px;
+      padding: 12px 14px;
+      outline: none;
+      letter-spacing: 0.05em;
+    }
+    .modal input::placeholder { color: #555; }
+    .modal input:focus { border-color: #fff; }
+
+    .modal button.login-btn {
+      width: 100%;
+      background: #fff;
+      color: #000;
+      border: none;
+      font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 14px;
+      cursor: pointer;
+    }
+    .modal button.login-btn:hover { background: #a7a9ab; }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #a7a9ab;
+      font-size: 22px;
+      cursor: pointer;
+      z-index: 201;
+    }
+    .modal-close:hover { color: #fff; }
+
+    .modal .error-msg {
+      font-size: 11px;
+      color: #c0392b;
+      letter-spacing: 0.05em;
+      display: none;
+    }
+    .modal .error-msg.visible { display: block; }
   </style>
 </head>
 <body>
 
-  <a class="investor-portal" href="#">Investor Portal</a>
+  <!-- Investor Portal link -->
+  <a class="investor-portal" href="#" onclick="openLogin(event)">Investor Portal</a>
+
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="loginOverlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeLogin()">✕</button>
+      <img src="RC_Wordmark_Logo_White_HR.png" alt="Raquette Capital" />
+      <h2>Investor Login</h2>
+      <input type="text" id="username" placeholder="Username" autocomplete="off" />
+      <input type="password" id="password" placeholder="Password" />
+      <span class="error-msg" id="errorMsg">Invalid username or password.</span>
+      <button class="login-btn" onclick="handleLogin()">Sign In</button>
+    </div>
+  </div>
 
   <div class="layout">
 
     <!-- Left panel -->
     <div class="panel-left">
 
-      <!-- Top-left favicon icon (RC mark only) -->
-      <svg class="site-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="1.5" y="1.5" width="37" height="37" stroke="white" stroke-width="1.2"/>
-        <rect x="6" y="6" width="28" height="28" stroke="white" stroke-width="0.8" opacity="0.5"/>
-        <path d="M10 30 L10 12 Q22 12 22 18 Q22 24 10 24 L18 24 L28 30" stroke="white" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
-      </svg>
-
-      <!-- Actual logo PNG -->
+      <!-- Logo -->
       <img
         class="logo"
         src="RC_Wordmark_Logo_White_HR.png"
         alt="Raquette Capital"
       />
 
-      <!-- Tagline block with rules -->
+      <!-- Tagline block -->
       <div class="tagline-block">
         <hr class="rule" />
         <p class="tagline">
@@ -183,6 +272,47 @@
     </div>
 
   </div>
+
+  <script>
+    function openLogin(e) {
+      e.preventDefault();
+      document.getElementById('loginOverlay').classList.add('active');
+      document.getElementById('username').focus();
+    }
+
+    function closeLogin() {
+      document.getElementById('loginOverlay').classList.remove('active');
+      document.getElementById('errorMsg').classList.remove('visible');
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    function handleLogin() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      const err  = document.getElementById('errorMsg');
+      // Dummy credentials — change these as needed
+      if (user === 'investor' && pass === 'raquette2024') {
+        err.classList.remove('visible');
+        alert('Welcome. Investor portal coming soon.');
+        closeLogin();
+      } else {
+        err.classList.add('visible');
+      }
+    }
+
+    // Close on overlay click
+    document.getElementById('loginOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeLogin();
+    });
+
+    // Enter key submits
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && document.getElementById('loginOverlay').classList.contains('active')) {
+        handleLogin();
+      }
+    });
+  </script>
 
 </body>
 </html>
