@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raquette Capital</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: #000;
+      color: #fff;
+      /* Bahnschrift Semi Condensed is a Windows system font; we cascade to similar web-safe condensed fonts */
+      font-family: 'Bahnschrift', 'Arial Narrow', 'Franklin Gothic Medium Cond', sans-serif;
+      font-stretch: condensed;
+      overflow: hidden;
+    }
+
+    /* ── Split layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      height: 100vh;
+    }
+
+    /* ── Left: black panel ── */
+    .panel-left {
+      background: #000000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 8% 0 11%;
+      position: relative;
+    }
+
+    /* small icon top-left */
+    .site-icon {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      width: 40px;
+      height: 40px;
+      opacity: 0.9;
+    }
+
+    /* logo */
+    .logo {
+      width: clamp(260px, 32vw, 420px);
+      height: auto;
+      margin-bottom: 44px;
+    }
+
+    /* rules + tagline block */
+    .tagline-block {
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .rule {
+      border: none;
+      border-top: 1px solid rgba(167, 169, 171, 0.5); /* #a7a9ab at 50% */
+      width: 100%;
+      margin-bottom: 26px;
+    }
+
+    .rule-bottom {
+      border: none;
+      border-top: 1px solid rgba(167, 169, 171, 0.5);
+      width: 100%;
+      margin-top: 26px;
+    }
+
+    .tagline {
+      font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+      font-weight: 300;
+      font-size: clamp(12px, 1.05vw, 14.5px);
+      line-height: 1.8;
+      color: #a7a9ab;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Right: photo ── */
+    .panel-right {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      display: block;
+      filter: grayscale(100%);
+    }
+
+    /* ── Investor Portal link ── */
+    .investor-portal {
+      position: fixed;
+      top: 22px;
+      right: 28px;
+      font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-decoration: none;
+      z-index: 100;
+    }
+    .investor-portal:hover {
+      color: #a7a9ab;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+      html, body { overflow: auto; }
+      .layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 55vw;
+        height: auto;
+        min-height: 100vh;
+      }
+      .panel-left {
+        padding: 72px 8% 44px;
+        align-items: center;
+      }
+      .logo { width: 75vw; max-width: 320px; }
+      .tagline { font-size: 13px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="investor-portal" href="#">Investor Portal</a>
+
+  <div class="layout">
+
+    <!-- Left panel -->
+    <div class="panel-left">
+
+      <!-- Top-left favicon icon (RC mark only) -->
+      <svg class="site-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1.5" y="1.5" width="37" height="37" stroke="white" stroke-width="1.2"/>
+        <rect x="6" y="6" width="28" height="28" stroke="white" stroke-width="0.8" opacity="0.5"/>
+        <path d="M10 30 L10 12 Q22 12 22 18 Q22 24 10 24 L18 24 L28 30" stroke="white" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+
+      <!-- Actual logo PNG -->
+      <img
+        class="logo"
+        src="RC_Wordmark_Logo_White_HR.png"
+        alt="Raquette Capital"
+      />
+
+      <!-- Tagline block with rules -->
+      <div class="tagline-block">
+        <hr class="rule" />
+        <p class="tagline">
+          A private real estate and capital platform that identifies mispriced outcomes
+          across markets and development cycles, and positions through land, partnerships,
+          or structured opportunities using proprietary intelligence and deep operational
+          expertise.
+        </p>
+        <hr class="rule-bottom" />
+      </div>
+
+    </div>
+
+    <!-- Right panel: B&W photo -->
+    <div class="panel-right">
+      <img
+        src="Raquette-Postdam.jpeg"
+        alt="Potsdam, New York waterfront"
+      />
+    </div>
+
+  </div>
+
+</body>
+</html>
